@@ -71,7 +71,7 @@
 
   <script>
     function loadClients() {
-      fetch("http://localhost:5000/clients")
+      fetch("/clients")
         .then(res => res.json())
         .then(data => {
           const tbody = document.getElementById("client-table");
