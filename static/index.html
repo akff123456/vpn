@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VPN Қосылу</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>VPN Қосылу беті</h1>
+
+  <div class="card">
+    <div class="status" id="vpn-status">VPN күйі: Өшірулі</div>
+    <div class="status" id="vpn-timer" style="margin-top: 10px;"></div>
+    <button class="btn" id="vpn-button" onclick="toggleVPN()">Қосылу</button>
+  </div>
+
+  <script>
+    let isConnected = false;
+    let seconds = 0;
+    let timerInterval;
+
+    const statusText = document.getElementById("vpn-status");
+    const vpnButton = document.getElementById("vpn-button");
+    const vpnTimer = document.getElementById("vpn-timer");
+
+    function formatTime(sec) {
+      const mins = Math.floor(sec / 60).toString().padStart(2, '0');
+      const secs = (sec % 60).toString().padStart(2, '0');
+      return `${mins}:${secs}`;
+    }
+
+    function startTimer() {
+      vpnTimer.textContent = "Сессия уақыты: 00:00";
+      timerInterval = setInterval(() => {
+        seconds++;
+        vpnTimer.textContent = `Сессия уақыты: ${formatTime(seconds)}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      vpnTimer.textContent = "";
+      seconds = 0;
+    }
+
+    function toggleVPN() {
+      vpnButton.disabled = true;
+
+      if (!isConnected) {
+        vpnButton.textContent = "Қосылып жатыр...";
+        statusText.textContent = "VPN күйі: Қосылып жатыр...";
+
+        setTimeout(() => {
+          isConnected = true;
+          statusText.textContent = "VPN күйі: Қосылған";
+          vpnButton.textContent = "Өшіру";
+          vpnButton.disabled = false;
+          startTimer();
+        }, 1000);
+      } else {
+        vpnButton.textContent = "Өшіріліп жатыр...";
+        statusText.textContent = "VPN күйі: Өшіріліп жатыр...";
+
+        setTimeout(() => {
+          isConnected = false;
+          statusText.textContent = "VPN күйі: Өшірулі";
+          vpnButton.textContent = "Қосылу";
+          vpnButton.disabled = false;
+          stopTimer();
+        }, 1000);
+      }
+    }
+  </script>
+</body>
+</html>
